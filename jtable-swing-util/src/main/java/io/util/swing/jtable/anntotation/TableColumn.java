@@ -1,4 +1,4 @@
-package io.util.swing.jtable.anntotatio;
+package io.util.swing.jtable.anntotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

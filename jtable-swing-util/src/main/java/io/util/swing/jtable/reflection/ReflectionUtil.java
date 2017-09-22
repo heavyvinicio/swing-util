@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JTable;
 
-import io.util.swing.jtable.anntotatio.TableColumn;
+import io.util.swing.jtable.anntotation.TableColumn;
 
 /**
  * <b> Utility class for work with reflection. </b>

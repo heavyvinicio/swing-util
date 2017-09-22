@@ -5,8 +5,9 @@
  */
 package io.util.test.model;
 
-import io.util.swing.jtable.anntotatio.TableColumn;
 import javax.swing.JButton;
+
+import io.util.swing.jtable.anntotation.TableColumn;
 
 
 /**
