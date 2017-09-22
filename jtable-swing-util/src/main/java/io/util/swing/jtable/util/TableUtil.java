@@ -1,6 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this license header, choose License Headers in Project
+ * Properties. To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package io.util.swing.jtable.util;
@@ -12,16 +12,28 @@ import java.io.Serializable;
 import javax.swing.JTable;
 
 /**
- *
- * @author fochoac
+ * <b> Utility class for generic properties in {@link JTable} . </b>
+ * 
+ * @author pocho
+ * @version $Revision: 1.0 $
+ *          <p>
+ *          [$Author: pocho $, $Date: 22/09/2017 $]
+ *          </p>
  */
 public final class TableUtil implements Serializable {
-
     private static final long serialVersionUID = 5612732890060901713L;
 
     private TableUtil() {
     }
 
+    /**
+     * <b> Method for apply generic changes in {@link JTable}. </b>
+     * <p>
+     * [Author: pocho, Date: 22/09/2017]
+     * </p>
+     *
+     * @param table {@link JTable}
+     */
     public static void applyGenericTableProperties(JTable table) {
         table.setRowHeight(25);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -32,7 +44,5 @@ public final class TableUtil implements Serializable {
         Dimension d = table.getTableHeader().getPreferredSize();
         d.setSize(d.getWidth(), d.getHeight() + 10);
         table.getTableHeader().setPreferredSize(d);
-        table.getTableHeader().setBackground(Color.BLUE);
-        ColumnUtil.getInstance().setBackgroundColor(Color.white).apply(table);
     }
 }

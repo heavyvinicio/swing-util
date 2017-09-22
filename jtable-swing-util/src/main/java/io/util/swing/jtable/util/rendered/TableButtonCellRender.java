@@ -1,6 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this license header, choose License Headers in Project
+ * Properties. To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package io.util.swing.jtable.util.rendered;
@@ -18,13 +18,16 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 /**
- *
- * @author fochoac
+ * <b> Class for render button in table cell. </b>
+ * 
+ * @author pocho
+ * @version $Revision: 1.0 $
+ *          <p>
+ *          [$Author: pocho $, $Date: 22/09/2017 $]
+ *          </p>
  */
 public class TableButtonCellRender extends AbstractCellEditor implements TableCellRenderer, TableCellEditor {
-
     private static final long serialVersionUID = 2278885091561298376L;
-
     private final Border originalBorder;
     private Border focusBorder;
     private final JButton renderButton;
@@ -38,7 +41,6 @@ public class TableButtonCellRender extends AbstractCellEditor implements TableCe
         editButton = new JButton();
         originalBorder = editButton.getBorder();
         setFocusBorder(new LineBorder(Color.BLUE));
-
     }
 
     public static final TableButtonCellRender renderedButtons(JTable tabla, Integer[] columns) {
@@ -57,7 +59,8 @@ public class TableButtonCellRender extends AbstractCellEditor implements TableCe
     /**
      * The foreground color of the button when the cell has focus
      *
-     * @param focusBorder the foreground color
+     * @param focusBorder
+     *            the foreground color
      */
     public void setFocusBorder(Border focusBorder) {
         this.focusBorder = focusBorder;
@@ -73,13 +76,11 @@ public class TableButtonCellRender extends AbstractCellEditor implements TableCe
             renderButton.setForeground(table.getForeground());
             renderButton.setBackground(UIManager.getColor("Button.background"));
         }
-
         if (hasFocus) {
             renderButton.setBorder(focusBorder);
         } else {
             renderButton.setBorder(originalBorder);
         }
-
         if (value == null) {
             renderButton.setText("");
             renderButton.setIcon(null);
@@ -90,7 +91,6 @@ public class TableButtonCellRender extends AbstractCellEditor implements TableCe
             renderButton.setText(((JButton) value).getText());
             renderButton.setIcon(null);
         }
-
         return renderButton;
     }
 
@@ -106,7 +106,6 @@ public class TableButtonCellRender extends AbstractCellEditor implements TableCe
             editButton.setText(((JButton) value).getText());
             editButton.setIcon(null);
         }
-
         this.editorValue = value;
         return editButton;
     }
@@ -115,5 +114,4 @@ public class TableButtonCellRender extends AbstractCellEditor implements TableCe
     public Object getCellEditorValue() {
         return this.editorValue;
     }
-
 }

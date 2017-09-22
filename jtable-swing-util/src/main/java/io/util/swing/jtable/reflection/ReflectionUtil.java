@@ -14,45 +14,56 @@ import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JTable;
+
 import io.util.swing.jtable.anntotatio.TableColumn;
 
 /**
- * <b> Clase utilitaria para gestionar la refleccion sobre los datos a mostrar
- * en el modelo. </b>
+ * <b> Utility class for work with reflection. </b>
  *
- * @author fochoac
+ * @author pocho
  * @version $Revision: 1.0 $
- * <p>
- * [$Author: fochoac $, $Date: 14/09/2017 $]
- * </p>
+ *          <p>
+ *          [$Author: pocho $, $Date: 14/09/2017 $]
+ *          </p>
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public final class ReflectionUtil implements Serializable {
-    
     private static final long serialVersionUID = 5173782948934070993L;
 
     /**
      * <b> Constructor de la clase. </b>
      * <p>
-     * [Author: fochoac, Date: 14/09/2017]
+     * [Author: pocho, Date: 14/09/2017]
      * </p>
      *
      */
     private ReflectionUtil() {
         super();
     }
-    
+
+    /**
+     * <b> Method for validate if field is static or final. </b>
+     * <p>
+     * [Author: pocho, Date: 22/09/2017]
+     * </p>
+     *
+     * @param field
+     *            {@link Field}
+     * @return <code>true</code> if field is static or final
+     */
     private static boolean isStaticOrFinal(Field field) {
         return Modifier.isStatic(field.getModifiers()) || Modifier.isFinal(field.getModifiers());
     }
 
     /**
-     * <b> Metodo para obtener los nombres de las columnas. </b>
+     * <b> Method for get columns names. </b>
      * <p>
-     * [Author: fochoac, Date: 14/09/2017]
+     * [Author: pocho, Date: 14/09/2017]
      * </p>
      *
-     * @param object objeto generico
+     * @param object
+     *            objeto generico
      * @return lista de objetos
      */
     public static <T> List getColumnNames(T object) {
@@ -64,20 +75,18 @@ public final class ReflectionUtil implements Serializable {
             if (field.isAnnotationPresent(TableColumn.class) && ((TableColumn) field.getDeclaredAnnotation(TableColumn.class)).visible() && !"DEFAULT".equalsIgnoreCase(field.getDeclaredAnnotation(TableColumn.class).columnName())) {
                 columnNames.put(field.getDeclaredAnnotation(TableColumn.class).order(), field.getDeclaredAnnotation(TableColumn.class).columnName());
             }
-            // else {
-            // columnNames.add(field.getName());
-            // }
         }
         return new ArrayList<>(columnNames.values());
     }
 
     /**
-     * <b> Metodo para convertir una lista en un mapa. </b>
+     * <b> Method for convert list objects to map. </b>
      * <p>
-     * [Author: fochoac, Date: 14/09/2017]
+     * [Author: pocho, Date: 14/09/2017]
      * </p>
      *
-     * @param dataList lista de datos
+     * @param dataList
+     *            lista de datos
      * @return mapa de filas y columnas
      */
     public static <T> Map<Integer, Map<Integer, Object>> convertListData2Map(List<T> dataList) {
@@ -91,7 +100,7 @@ public final class ReflectionUtil implements Serializable {
                 rows.put(index, convertObjectData2Map(object));
                 index++;
             } catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-                 Logger.getLogger(ReflectionUtil.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ReflectionUtil.class.getName()).log(Level.SEVERE, null, ex);
                 return new TreeMap<>();
             }
         }
@@ -99,21 +108,26 @@ public final class ReflectionUtil implements Serializable {
     }
 
     /**
-     * <b> Metodo para converir un objeto a una fila. </b>
+     * <b> Method for convert object to map (row in {@link JTable}).
+     * </b>
      * <p>
-     * [Author: fochoac, Date: 14/09/2017]
+     * [Author: pocho, Date: 14/09/2017]
      * </p>
      *
      * @param object
-     * @return
+     *            T
+     * @return {@link Map}
      * @throws IntrospectionException
+     *             error
      * @throws IllegalAccessException
+     *             error
      * @throws IllegalArgumentException
+     *             error
      * @throws InvocationTargetException
+     *             error
      */
     private static <T> Map<Integer, Object> convertObjectData2Map(T object) throws IntrospectionException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         Map<Integer, Object> row = new TreeMap<>();
-        // int index = 0;
         for (Field field : getFieldsObject(object)) {
             if (isStaticOrFinal(field)) {
                 continue;
@@ -125,22 +139,20 @@ public final class ReflectionUtil implements Serializable {
             if (tableColumn != null && tableColumn.visible()) {
                 row.put(tableColumn.order(), loadValueColumn(object, field));
             }
-            // else {
-            // row.put(index, loadValueColumn(object, field));
-            // }
-            // index++;
         }
         return row;
     }
 
     /**
-     * <b> Metodo para cargar el valor de la columna. </b>
+     * <b> Method for load value to column. </b>
      * <p>
-     * [Author: fochoac, Date: 14/09/2017]
+     * [Author: pocho, Date: 14/09/2017]
      * </p>
      *
-     * @param object objeto generico
-     * @param field {@link Field}
+     * @param object
+     *            objeto generico
+     * @param field
+     *            {@link Field}
      * @return columna generada
      * @throws IntrospectionException
      * @throws IllegalAccessException
@@ -149,7 +161,7 @@ public final class ReflectionUtil implements Serializable {
      */
     private static <T> Object loadValueColumn(T object, Field field) throws IntrospectionException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         if (Modifier.isPrivate(field.getModifiers())) {
-            return new PropertyDescriptor(field.getName(), object.getClass()).getReadMethod().invoke(object, new Object[]{});
+            return new PropertyDescriptor(field.getName(), object.getClass()).getReadMethod().invoke(object, new Object[] {});
         }
         return null;
     }
@@ -159,7 +171,8 @@ public final class ReflectionUtil implements Serializable {
      * Method for get Fields of object class by reflection
      * </p>
      *
-     * @param object T class
+     * @param object
+     *            T class
      * @return array of Fields
      */
     private static <T> Field[] getFieldsObject(T object) {
@@ -171,8 +184,10 @@ public final class ReflectionUtil implements Serializable {
      * Method for valdiate if a cell is editable
      * </p>
      *
-     * @param object Object
-     * @return List of boolean values with column true when is editable
+     * @param object
+     *            Object
+     * @return List of boolean values with column true when is
+     *         editable
      */
     public static <T> List<Boolean> isCellEditable(T object) {
         List<Boolean> estados = new ArrayList<>();
@@ -190,8 +205,10 @@ public final class ReflectionUtil implements Serializable {
      * Method for make merge two object when the case is necesary
      * </p>
      *
-     * @param object OBject
-     * @param values row to validate
+     * @param object
+     *            OBject
+     * @param values
+     *            row to validate
      */
     public static <T> void mergeChanges(T object, Map<Integer, Object> values) {
         int index = 0;
@@ -216,16 +233,21 @@ public final class ReflectionUtil implements Serializable {
 
     /**
      * <p>
-     * Method for update modificate object value from column modification
+     * Method for update modificate object value from column
+     * modification
      * </p>
      *
-     * @param object OBject
-     * @param field FIeld
-     * @param newValue new value
-     * @throws Exception in case of error
+     * @param object
+     *            OBject
+     * @param field
+     *            FIeld
+     * @param newValue
+     *            new value
+     * @throws Exception
+     *             in case of error
      */
     private static <T> void changeValue(T object, Field field, Object newValue) throws Exception {
-        Statement a = new Statement(object, "set" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1), new Object[]{newValue});
+        Statement a = new Statement(object, "set" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1), new Object[] { newValue });
         a.execute();
     }
 }

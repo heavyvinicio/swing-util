@@ -17,18 +17,18 @@ import javax.swing.table.AbstractTableModel;
 import io.util.swing.jtable.reflection.ReflectionUtil;
 
 /**
- * <b> Clase utilitaria para gestionar el modelo de una {@link JTable}. </b>
+ * <b> Utility class for generate
+ * {@link JTable#setModel(javax.swing.table.TableModel)}
+ * {@link JTable}. </b>
  *
  * @author pocho
  * @version $Revision: 1.0 $
- * <p>
- * [$Author: pocho $, $Date: 14/09/2017 $]
- * </p>
+ *          <p>
+ *          [$Author: pocho $, $Date: 14/09/2017 $]
+ *          </p>
  */
 public class JTableModel<T> extends AbstractTableModel implements Serializable {
-
     private static final long serialVersionUID = -774784899858710143L;
-
     T t;
     private List<T> listaDatos;
     private Map<Integer, Map<Integer, Object>> rows;
@@ -50,10 +50,11 @@ public class JTableModel<T> extends AbstractTableModel implements Serializable {
     /**
      * <b> Constructor de la clase. </b>
      * <p>
-     * [Author: fochoac, Date: 14/09/2017]
+     * [Author: pocho, Date: 14/09/2017]
      * </p>
      *
-     * @param listaDatos lista de datos genericos
+     * @param listaDatos
+     *            lista de datos genericos
      */
     @SuppressWarnings("unchecked")
     public JTableModel(List<T> listaDatos) {
@@ -66,6 +67,11 @@ public class JTableModel<T> extends AbstractTableModel implements Serializable {
         columnNames = ReflectionUtil.getColumnNames(listaDatos.get(0));
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see javax.swing.table.AbstractTableModel#getColumnName(int)
+     */
     @Override
     public String getColumnName(int columnIndex) {
         if (columnNames == null) {
@@ -74,6 +80,11 @@ public class JTableModel<T> extends AbstractTableModel implements Serializable {
         return columnNames.get(columnIndex);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see javax.swing.table.AbstractTableModel#getColumnClass(int)
+     */
     @Override
     public Class<?> getColumnClass(int columnIndex) {
         if (rows == null || rows.isEmpty()) {
@@ -85,12 +96,24 @@ public class JTableModel<T> extends AbstractTableModel implements Serializable {
         return rows.get(0).get(columnIndex).getClass();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see javax.swing.table.AbstractTableModel#isCellEditable(int,
+     * int)
+     */
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
         T obj = listaDatos.get(rowIndex);
         return ReflectionUtil.isCellEditable(obj).get(columnIndex);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see javax.swing.table.AbstractTableModel#setValueAt(java.lang.
+     * Object, int, int)
+     */
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         for (Map.Entry<Integer, Map<Integer, Object>> row : rows.entrySet()) {
@@ -102,6 +125,19 @@ public class JTableModel<T> extends AbstractTableModel implements Serializable {
         fireTableCellUpdated(rowIndex, columnIndex);
     }
 
+    /**
+     * <b> Methos for update cell values. </b>
+     * <p>
+     * [Author: pocho, Date: 22/09/2017]
+     * </p>
+     *
+     * @param aValue
+     *            {@link Object}
+     * @param rowIndex
+     *            row
+     * @param columnIndex
+     *            column
+     */
     private void updateCellValue(Object aValue, int rowIndex, int columnIndex) {
         T obj = listaDatos.get(rowIndex);
         if (ReflectionUtil.isCellEditable(obj).get(columnIndex)) {
@@ -112,14 +148,24 @@ public class JTableModel<T> extends AbstractTableModel implements Serializable {
     }
 
     /**
+     * <b> Method for get value from row select. </b>
+     * <p>
+     * [Author: pocho, Date: 22/09/2017]
+     * </p>
      *
      * @param row
-     * @return
+     *            row index
+     * @return T
      */
     public T get(int row) {
         return listaDatos.get(row);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see javax.swing.table.TableModel#getRowCount()
+     */
     @Override
     public int getRowCount() {
         if (rows == null) {
@@ -128,6 +174,11 @@ public class JTableModel<T> extends AbstractTableModel implements Serializable {
         return rows.size();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see javax.swing.table.TableModel#getColumnCount()
+     */
     @Override
     public int getColumnCount() {
         if (columnNames == null) {
@@ -136,19 +187,25 @@ public class JTableModel<T> extends AbstractTableModel implements Serializable {
         return columnNames.size();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see javax.swing.table.TableModel#getValueAt(int, int)
+     */
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         if (rowIndex < rows.size() && columnIndex < columnNames.size()) {
-
             Object o = rows.get(rowIndex).get(columnIndex);
-
             return o;
-
         }
         return null;
     }
 
     /**
+     * <b> Incluir aqui­ la descripcion del metodo. </b>
+     * <p>
+     * [Author: pocho, Date: 22/09/2017]
+     * </p>
      *
      * @param t
      */
@@ -161,8 +218,13 @@ public class JTableModel<T> extends AbstractTableModel implements Serializable {
     }
 
     /**
+     * <b> Method for remove row in {@link JTable} by T object. </b>
+     * <p>
+     * [Author: pocho, Date: 22/09/2017]
+     * </p>
      *
      * @param t
+     *            T
      */
     public void removeRow(T t) {
         List<T> listTmp = new ArrayList<>(listaDatos);
@@ -173,6 +235,10 @@ public class JTableModel<T> extends AbstractTableModel implements Serializable {
     }
 
     /**
+     * <b> Method for remove row by row index. </b>
+     * <p>
+     * [Author: pocho, Date: 22/09/2017]
+     * </p>
      *
      * @param row
      */
@@ -185,6 +251,10 @@ public class JTableModel<T> extends AbstractTableModel implements Serializable {
     }
 
     /**
+     * <b> Method for remove all rows in {@link JTable}. </b>
+     * <p>
+     * [Author: pocho, Date: 22/09/2017]
+     * </p>
      *
      */
     public void removeAll() {

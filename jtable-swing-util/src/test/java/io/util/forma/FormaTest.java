@@ -5,21 +5,22 @@
  */
 package io.util.forma;
 
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.swing.JTable;
+import javax.swing.SwingUtilities;
+
 import io.util.swing.jtable.component.JTableModel;
 import io.util.swing.jtable.util.ColumnAutoSizeUtil;
 import io.util.swing.jtable.util.ColumnUtil;
 import io.util.swing.jtable.util.EventUtil;
 import io.util.swing.jtable.util.TableUtil;
 import io.util.swing.jtable.util.rendered.TableButtonCellRender;
-
 import io.util.test.model.TestModel;
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Arrays;
-import java.util.List;
-import javax.swing.JTable;
-import javax.swing.SwingUtilities;
 
 /**
  *
