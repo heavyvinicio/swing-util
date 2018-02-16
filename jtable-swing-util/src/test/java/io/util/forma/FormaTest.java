@@ -1,32 +1,32 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this license header, choose License Headers in Project
+ * Properties. To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package io.util.forma;
 
 import io.util.swing.jtable.component.JTableModel;
-import io.util.swing.jtable.util.ColumnAutoSizeUtil;
 import io.util.swing.jtable.util.ColumnUtil;
 import io.util.swing.jtable.util.EventUtil;
+import io.util.swing.jtable.util.RowUtil;
 import io.util.swing.jtable.util.TableUtil;
-import io.util.swing.jtable.util.rendered.TableButtonCellRender;
 
 import io.util.test.model.TestModel;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.JTable;
-import javax.swing.SwingUtilities;
+import javax.swing.SwingConstants;
+import javax.swing.table.TableCellRenderer;
 
 /**
  *
  * @author fochoac
  */
 public class FormaTest extends javax.swing.JFrame {
-
     private static final long serialVersionUID = 8150034364927655266L;
     private TestModel modeloSeleccionado;
 
@@ -36,21 +36,34 @@ public class FormaTest extends javax.swing.JFrame {
     public FormaTest() {
         initComponents();
         List<TestModel> lista = cargarData();
+        List<TestModel> lista2 = cargarData();
         cargarEventosBotones(lista);
+        cargarEventosBotones2(lista2);
+        // tblTest2.setModel(new JTableModel(lista2, 1,4, 5));
+        // tblTest = new JTable(new JTableModel(lista)) {
+        // private static final long serialVersionUID =
+        // -4504287611807565067L;
+        // @Override
+        // public Component prepareRenderer(TableCellRenderer
+        // renderer, int row, int column) {
+        // Component c = super.prepareRenderer(renderer, row, column);
+        // //To change body of generated methods, choose Tools |
+        // Templates.
+        // c.setBackground(Color.CYAN);
+        // return c;
+        // }
+        //
+        // };
         tblTest.setModel(new JTableModel(lista));
-        TableUtil.applyGenericTableProperties(tblTest);
-        tblTest.repaint();
-        ColumnAutoSizeUtil.sizeColumnsToFit(tblTest);
-        tblTest.setAutoCreateRowSorter(true);
-        //ColumnUtil.getInstance().setBackgroundColor(Color.yellow).setHorizontalAlignment(SwingUtilities.RIGHT).apply(tblTest, 0, 1, 2, 3, 4);
-        ColumnUtil.getInstance().setBackgroundColor(Color.red).setHorizontalAlignment(SwingUtilities.RIGHT).apply(tblTest);
-        TableButtonCellRender.renderedButtons(tblTest, new Integer[]{4, 5});
-        tblTest.setRowHeight(25);
-        tblTest.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        tblTest.setShowGrid(true);
-        tblTest.setShowVerticalLines(true);
-        tblTest.setGridColor(new Color(0, 128, 0));
-
+        tblTest2.setModel(new JTableModel(lista2, new String[] { "columnaUno", "columnaDos", "boton2" }, new String[] { "Columna A", "columnaDos", "boton" }, new int[] { 0 }) {
+        });
+        // TableUtil.applyGenericTableProperties(tblTest2, 2);
+        TableUtil.applyGenericTableProperties(tblTest, 4, 5);
+        TableUtil.applyGenericTableProperties(tblTest2, 2);
+        // ColumnUtil.getInstance(tblTest2).makeMultiLine().applyOverColumns(0,
+        // 1);
+        ColumnUtil.getInstance(tblTest2).setVerticalAlignment(SwingConstants.CENTER).setHorizontalAlignment(SwingConstants.CENTER).setBackgroundColor(Color.yellow).applyAllColumns();
+        // RowUtil.getInstance(tblTest).setBackground(Color.yellow).apply("2");
     }
 
     private void cargarEventosBotones(List<TestModel> lista) {
@@ -67,7 +80,23 @@ public class FormaTest extends javax.swing.JFrame {
                     ejecutarAccionBotonUno();
                 }
             });
+        }
+    }
 
+    private void cargarEventosBotones2(List<TestModel> lista) {
+        for (TestModel m : lista) {
+            m.getBoton2().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    ejecutarAccionBotonDos2();
+                }
+            });
+            m.getBoton().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    ejecutarAccionBotonUno2();
+                }
+            });
         }
     }
 
@@ -79,112 +108,116 @@ public class FormaTest extends javax.swing.JFrame {
         System.out.println("opt 2: " + modeloSeleccionado);
     }
 
+    private void ejecutarAccionBotonUno2() {
+        System.out.println("opt 1: " + modeloSeleccionado);
+    }
+
+    private void ejecutarAccionBotonDos2() {
+        System.out.println("opt 2: " + modeloSeleccionado);
+    }
+
     /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
+     * This method is called from within the constructor to initialize
+     * the form. WARNING: Do NOT modify this code. The content of this
+     * method is always regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
         tblTest = new javax.swing.JTable();
-
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblTest2 = new javax.swing.JTable();
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        tblTest.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
+        tblTest.setModel(
+                new javax.swing.table.DefaultTableModel(new Object[][] { { null, null, null, null }, { null, null, null, null }, { null, null, null, null }, { null, null, null, null } }, new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
         tblTest.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblTestMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tblTest);
-
+        jScrollPane2.setViewportView(tblTest);
+        tblTest2.setModel(
+                new javax.swing.table.DefaultTableModel(new Object[][] { { null, null, null, null }, { null, null, null, null }, { null, null, null, null }, { null, null, null, null } }, new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
+        tblTest2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblTest2MouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tblTest2);
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 709, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(124, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 25, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-
+        layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout
+                .createSequentialGroup()
+                .addGap(47, 47, 47)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false).addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 744, Short.MAX_VALUE).addComponent(jScrollPane3))
+                .addContainerGap(114, Short.MAX_VALUE)));
+        layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout
+                .createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(153, Short.MAX_VALUE)));
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tblTestMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTestMouseClicked
+    private void tblTestMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_tblTestMouseClicked
         modeloSeleccionado = (TestModel) EventUtil.getObjectFromClick(evt, tblTest);
         EventUtil.executeClick(evt, tblTest);
+    }// GEN-LAST:event_tblTestMouseClicked
 
-    }//GEN-LAST:event_tblTestMouseClicked
+    private void tblTest2MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_tblTest2MouseClicked
+        modeloSeleccionado = (TestModel) EventUtil.getObjectFromClick(evt, tblTest2);
+        EventUtil.executeClick(evt, tblTest2);
+    }// GEN-LAST:event_tblTest2MouseClicked
+
     private List cargarData() {
         TestModel m1 = new TestModel("10", "9", "3", "4");
-        TestModel m2 = new TestModel("9", "8", "3", "4");
+        TestModel m2 = new TestModel("9", "8", "3", "4asdfasdfasdhfkajsdhfkjahsdfkjasdf");
         TestModel m3 = new TestModel("8", "7", "3", "4");
-        TestModel m4 = new TestModel("7", "6", "3", "4");
+        TestModel m4 = new TestModel("7", "6asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfajsgfasdf", "3", "4");
         TestModel m5 = new TestModel("6", "5", "3", "4");
         TestModel m6 = new TestModel("5", "4", "3", "4");
         TestModel m7 = new TestModel("4", "3", "3", "4");
-        TestModel m8 = new TestModel("3", "2", "3", "4");
+        TestModel m8 = new TestModel("3", "2dsfuasdhfkjashdfkjhasdkjfhakljsdhfkjalsdhfkjajdsfasdf", "3", "4");
         TestModel m9 = new TestModel("2", "1", "3", "4");
-        TestModel m10 = new TestModel("1", "0", "3", "4");
+        TestModel m10 = new TestModel("1", "0", "3sadfjhakjsdfhkajshdfkjahsdkfjhakjdshfkasdhfkahdsfkaghfsdjagsdfjagsdfkjgasjdfgasdkjfgasjkdfgakjfdgskjd", "4");
         return Arrays.asList(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10);
-
     }
 
     /**
-     * @param args the command line arguments
+     * @param args
+     *            the command line arguments
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+        // <editor-fold defaultstate="collapsed" desc=" Look and feel
+        // setting code (optional) ">
+        /*
+         * If Nimbus (introduced in Java SE 6) is not available, stay
+         * with the default look and feel. For details see
+         * http://download.oracle.com/javase/tutorial/uiswing/
+         * lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FormaTest.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
+            java.util.logging.Logger.getLogger(FormaTest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FormaTest.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
+            java.util.logging.Logger.getLogger(FormaTest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FormaTest.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
+            java.util.logging.Logger.getLogger(FormaTest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FormaTest.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormaTest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-
+        // </editor-fold>
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -193,9 +226,10 @@ public class FormaTest extends javax.swing.JFrame {
         });
     }
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable tblTest;
+    private javax.swing.JTable tblTest2;
     // End of variables declaration//GEN-END:variables
 }
