@@ -9,19 +9,19 @@ import javax.swing.JTable;
 
 /**
  * <b> Utility model for {@link JTable}. </b>
- * 
+ *
  * @author pocho
  * @version $Revision: 1.0 $
- *          <p>
- *          [$Author: fochoac $, $Date: 15/09/2017 $]
- *          </p>
+ * <p>
+ * [$Author: fochoac $, $Date: 15/09/2017 $]
+ * </p>
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface TableColumn {
+
     /**
-     * <b> Metodo para gestioanr el orden de presentacion de las
-     * columnas. </b>
+     * <b> Metodo para gestioanr el orden de presentacion de las columnas. </b>
      * <p>
      * [Author: pocho, Date: 14/09/2017]
      * </p>
