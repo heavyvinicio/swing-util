@@ -50,7 +50,8 @@ public class EventUtil implements Serializable {
      */
     public static final void executeClick(MouseEvent event, final JTable table) {
         int column = table.getColumnModel().getColumnIndexAtX(event.getX());
-        int row = event.getY() / table.getRowHeight();
+        int row = table.rowAtPoint(event.getPoint());
+        //int row = event.getY() / table.getRowHeight();
         if (row < table.getRowCount() && row >= 0 && column < table.getColumnCount() && column >= 0) {
             Object value = table.getValueAt(row, column);
             if (value instanceof JButton) {
