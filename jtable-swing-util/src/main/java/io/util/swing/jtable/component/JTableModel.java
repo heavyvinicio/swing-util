@@ -7,9 +7,12 @@ package io.util.swing.jtable.component;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.Logger;
 
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
@@ -17,7 +20,7 @@ import javax.swing.table.AbstractTableModel;
 import io.util.swing.jtable.reflection.ReflectionUtil;
 
 /**
- * <b> Utility class for generate
+ * <b> Utility class for generate null
  * {@link JTable#setModel(javax.swing.table.TableModel)}
  * {@link JTable}. </b>
  *
@@ -33,6 +36,10 @@ public class JTableModel<T> extends AbstractTableModel implements Serializable {
     private List<T> listaDatos;
     private Map<Integer, Map<Integer, Object>> rows;
     private List<String> columnNames;
+    private int[] columns = null;
+    boolean editableLock = false;
+    private Map<Integer, String> columnasEditables;
+    private String[] atributos;
 
     /**
      * <b> Constructor de la clase. </b>
@@ -45,6 +52,8 @@ public class JTableModel<T> extends AbstractTableModel implements Serializable {
         listaDatos = new ArrayList<>();
         rows = new TreeMap<>();
         columnNames = new ArrayList<>();
+        columns = null;
+        columnasEditables = new HashMap<>();
     }
 
     /**
@@ -65,6 +74,62 @@ public class JTableModel<T> extends AbstractTableModel implements Serializable {
             return;
         }
         columnNames = ReflectionUtil.getColumnNames(listaDatos.get(0));
+        editableLock = true;
+    }
+
+    public JTableModel(List<T> listaDatos, int... columnas) {
+        this();
+        this.listaDatos = listaDatos;
+        rows = ReflectionUtil.convertListData2Map(this.listaDatos, columnas);
+        if (rows.isEmpty()) {
+            return;
+        }
+        columnNames = ReflectionUtil.getColumnNames(listaDatos.get(0), columnas);
+        this.columns = columnas;
+        editableLock = true;
+    }
+
+    public JTableModel(List<T> listaDatos, String[] atributos, String[] nombreColumnas) {
+        this();
+        if (atributos.length != nombreColumnas.length) {
+            Logger.getLogger(getClass().getName()).info("El número de atributos no coincide con el numero de columnas");
+            return;
+        }
+        this.columnNames.addAll(Arrays.asList(nombreColumnas));
+        rows = ReflectionUtil.convertListData2Map(listaDatos, atributos);
+        if (rows.isEmpty()) {
+            return;
+        }
+        this.listaDatos = listaDatos;
+        editableLock = false;
+    }
+
+    public JTableModel(List<T> listaDatos, String[] atributos, String[] nombreColumnas, int[] columnasEditables) {
+        this();
+        if (atributos.length != nombreColumnas.length) {
+            Logger.getLogger(getClass().getName()).info("El número de atributos no coincide con el numero de columnas");
+            return;
+        }
+        if (columnasEditables == null || columnasEditables.length == 0) {
+            Logger.getLogger(getClass().getName()).info("No ha ingresado las columnas que son editables");
+            return;
+        }
+        cargarDatosEditables(atributos, columnasEditables);
+        this.columnNames.addAll(Arrays.asList(nombreColumnas));
+        rows = ReflectionUtil.convertListData2Map(listaDatos, atributos);
+        if (rows.isEmpty()) {
+            return;
+        }
+        this.listaDatos = listaDatos;
+        editableLock = true;
+        this.atributos = atributos;
+    }
+
+    private void cargarDatosEditables(String[] atributos, int[] columnas) {
+        columnasEditables = new HashMap<>();
+        for (Integer index : columnas) {
+            columnasEditables.put(index, atributos[index]);
+        }
     }
 
     /*
@@ -105,7 +170,37 @@ public class JTableModel<T> extends AbstractTableModel implements Serializable {
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
         T obj = listaDatos.get(rowIndex);
-        return ReflectionUtil.isCellEditable(obj).get(columnIndex);
+        return editableLock ? validateEditColumn(obj, columnIndex) : false;
+    }
+
+    /**
+     * <b> Method for validate . </b>
+     * <p>
+     * [Author: fochoac, Date: 16/02/2018]
+     * </p>
+     *
+     * @param columnIndex
+     * @return
+     */
+    private boolean validateEditColumn(int columnIndex) {
+        if (columnasEditables != null && !columnasEditables.isEmpty()) {
+            return columnasEditables.get(columnIndex) != null;
+        }
+        return false;
+    }
+
+    /**
+     * <b> Incluir aqui­ la descripcion del metodo. </b>
+     * <p>
+     * [Author: fochoac, Date: 16/02/2018]
+     * </p>
+     *
+     * @param obj
+     * @param columnIndex
+     * @return
+     */
+    private boolean validateEditColumn(T obj, int columnIndex) {
+        return ReflectionUtil.isCellEditable(obj).get(columnIndex) || validateEditColumn(columnIndex);
     }
 
     /*
@@ -140,10 +235,18 @@ public class JTableModel<T> extends AbstractTableModel implements Serializable {
      */
     private void updateCellValue(Object aValue, int rowIndex, int columnIndex) {
         T obj = listaDatos.get(rowIndex);
-        if (ReflectionUtil.isCellEditable(obj).get(columnIndex)) {
+        if (validateEditColumn(obj, columnIndex)) {
             rows.get(rowIndex).replace(columnIndex, aValue);
             super.setValueAt(aValue, rowIndex, columnIndex);
-            ReflectionUtil.mergeChanges(obj, rows.get(rowIndex));
+            if (columnasEditables != null && !columnasEditables.isEmpty()) {
+                ReflectionUtil.mergeChanges(obj, rows.get(rowIndex), columnasEditables);
+                return;
+            }
+            if (columns == null) {
+                ReflectionUtil.mergeChanges(obj, rows.get(rowIndex));
+            } else {
+                ReflectionUtil.mergeChanges(obj, rows.get(rowIndex), columns);
+            }
         }
     }
 
