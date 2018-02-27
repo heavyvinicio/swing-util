@@ -118,7 +118,7 @@ public class RowUtil implements Serializable {
                     } else if ("BORDER".equals(item.getKey())) {
                         r.setBorder((Border) item.getValue());
                     } else if ("MULTI_LINE_NEW_LINE".equals(item.getKey())) {
-                        r.agregarNuevaLinea(true);
+                      //  r.agregarNuevaLinea(true);
                     }
 
                 }

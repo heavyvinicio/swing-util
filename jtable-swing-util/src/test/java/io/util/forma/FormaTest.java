@@ -5,22 +5,20 @@
  */
 package io.util.forma;
 
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.swing.SwingConstants;
+
 import io.util.swing.jtable.component.JTableModel;
 import io.util.swing.jtable.util.ColumnUtil;
 import io.util.swing.jtable.util.EventUtil;
 import io.util.swing.jtable.util.RowUtil;
 import io.util.swing.jtable.util.TableUtil;
-
 import io.util.test.model.TestModel;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Arrays;
-import java.util.List;
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
-import javax.swing.table.TableCellRenderer;
 
 /**
  *
@@ -55,15 +53,15 @@ public class FormaTest extends javax.swing.JFrame {
         //
         // };
         tblTest.setModel(new JTableModel(lista));
-        tblTest2.setModel(new JTableModel(lista2, new String[] { "columnaUno", "columnaDos", "boton2" }, new String[] { "Columna A", "columnaDos", "boton" }, new int[] { 0 }) {
+        tblTest2.setModel(new JTableModel(lista2, new String[] { "columnaUno", "columnaDos", "boton2" }, new String[] { "Columna A", "columnaDos", "boton" }, new Integer[] { 0 }) {
         });
         // TableUtil.applyGenericTableProperties(tblTest2, 2);
-        TableUtil.applyGenericTableProperties(tblTest, 4, 5);
-        TableUtil.applyGenericTableProperties(tblTest2, 2);
+        TableUtil.applyGenericTableProperties(tblTest);
+        TableUtil.applyGenericTableProperties(tblTest2);
         // ColumnUtil.getInstance(tblTest2).makeMultiLine().applyOverColumns(0,
         // 1);
-        ColumnUtil.getInstance(tblTest2).setVerticalAlignment(SwingConstants.CENTER).setHorizontalAlignment(SwingConstants.CENTER).setBackgroundColor(Color.yellow).applyAllColumns();
-        // RowUtil.getInstance(tblTest).setBackground(Color.yellow).apply("2");
+        ColumnUtil.getInstance(tblTest2).setVerticalAlignment(SwingConstants.CENTER).setHorizontalAlignment(SwingConstants.CENTER).setBackgroundColor(Color.yellow).applyOverColumns(1);//AllColumns();
+         RowUtil.getInstance(tblTest).setBackground(Color.red).apply("2");
     }
 
     private void cargarEventosBotones(List<TestModel> lista) {
